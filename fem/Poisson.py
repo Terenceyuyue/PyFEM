@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri May 22 13:50:07 2020
 
 @author: Terenceyuyue
 """
@@ -92,7 +91,7 @@ def Poisson(node,elem,pde,bdStruct,*args):
     
     # ---------------------- Solver -------------------------
     uh[freeNode] = spsolve( kk[ np.ix_(freeNode,freeNode) ],ff[freeNode] );
-    #print(uh);
+    
     return uh;
 
 

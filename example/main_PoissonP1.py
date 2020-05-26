@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun May 17 12:23:54 2020
 
 @author: Terenceyuyue
 """
@@ -16,8 +15,7 @@ from pdedata.Poissondata import Poissondata
 # tool
 from tool.setboundary import setboundary
 from tool.mesh import squaremesh
-from tool.getError import getL2error, getH1error
-from tool.getError import showrateh
+from tool.getError import getL2error, getH1error, showrateh
 from tool.mesh import uniformrefine
 
 # Poisson func
@@ -61,7 +59,6 @@ showrateh(h,ErrL2,ErrH1)
 
 toc = (time.process_time() - tic);
 print('process_time = %.4f s' % toc)
-
 
 
 

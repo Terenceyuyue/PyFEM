@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun May 17 21:49:16 2020
 
 @author: Terenceyuyue
 """
@@ -36,9 +35,13 @@ def setboundary(node,elem,*args):
     # initial as Dirichlet (True for Dirichlet, False for Neumann)
     bdFlag = np.array( [True]*nE );
     nodebdEdge = ( node[bdEdge[:,0],:] + node[bdEdge[:,1],:] )/2;
-    x = nodebdEdge[:,0]; y = nodebdEdge[:,1];    
+    x1 = nodebdEdge[:,0]; y1 = nodebdEdge[:,1];    
     if bdNeumann != []:
-        id = eval(bdNeumann);
+        id = np.array([False]*nE);
+        for i in range(nE):
+            x = x1[i]; y = y1[i];
+            if eval(bdNeumann):
+               id[i] = True;
         bdFlag[id] = False;
     
     elemD = bdEdge[bdFlag, :];

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat May 23 21:03:19 2020
 
 @author: Terenceyuyue
 """
@@ -15,10 +14,8 @@ import time
 from pdedata.Poissondata import Poissondata
 # tool
 from tool.setboundary import setboundary
-from tool.mesh import squaremesh
-from tool.getError import getL2error, getH1error
-from tool.getError import showrateh
-from tool.mesh import uniformrefine
+from tool.mesh import squaremesh, uniformrefine
+from tool.getError import getL2error, getH1error, showrateh
 
 # Poisson func
 from fem.Poisson import PoissonP3

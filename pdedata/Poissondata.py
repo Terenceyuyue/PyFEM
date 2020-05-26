@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun May 17 21:20:52 2020
 
 @author: Terenceyuyue
 """
