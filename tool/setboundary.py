@@ -37,19 +37,20 @@ def setboundary(node,elem,*args):
     nodebdEdge = ( node[bdEdge[:,0],:] + node[bdEdge[:,1],:] )/2;
     x1 = nodebdEdge[:,0]; y1 = nodebdEdge[:,1];    
     if bdNeumann != []:
-        id = np.array([False]*nE);
-        for i in range(nE):
-            x = x1[i]; y = y1[i];
-            if eval(bdNeumann):
-               id[i] = True;
+        # id = np.array([False]*nE);
+        # for i in range(nE):
+        #     x = x1[i]; y = y1[i];
+        #     if eval(bdNeumann):
+        #        id[i] = True;
+        id = [eval(bdNeumann) for x,y in zip(x1,y1)];
         bdFlag[id] = False;
     
     elemD = bdEdge[bdFlag, :];
-    elemN = bdEdge[~bdFlag, :];
+    elemN = bdEdge[~bdFlag, :]; # np.array 型的逻辑数组可取反
     eD = np.unique(elemD);
     bdIndex = np.where(s==1)[0]; # 注意 np.where 给出的是元组
     bdIndexD = bdIndex[bdFlag]; 
-    bdIndexN = bdIndex[~bdFlag];
+    bdIndexN = bdIndex[~bdFlag]; 
         
     bdStruct = {'elemD':elemD, 'elemN':elemN, 'eD':eD,  \
                 'bdIndex':bdIndex, 'bdIndexD':bdIndexD, 'bdIndexN':bdIndexN};
