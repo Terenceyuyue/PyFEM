@@ -23,7 +23,7 @@ def Poisson(node,elem,pde,bdStruct,*args):
     if len(args) == 1: quadOrder = args[0];    
     
     N = node.shape[0];  NT = elem.shape[0];  Ndof = 3;
-    f = pde['f'];
+    f = pde.f;
     # -------------- Sparse assembling indices --------------
     nnz = NT*Ndof**2;
     ii = np.array( range(nnz), dtype = np.int); 
@@ -69,12 +69,12 @@ def Poisson(node,elem,pde,bdStruct,*args):
     ff = np.bincount(elem.ravel("F"), weights = F.ravel("F"), minlength = N);
     
     # ------------ Neumann boundary conditions --------------
-    elemN = bdStruct['elemN'];
+    elemN = bdStruct.elemN;
     if elemN.any():
         z1 = node[elemN[:,0],:]; z2 = node[elemN[:,1],:];
         e = z1-z2; # e = z2-z1
         ne = np.array( [ -e[:,1], e[:,0] ] ).transpose(); # scaled ne
-        Du = pde['Du'];
+        Du = pde.Du;
         gradu1 = Du(z1); gradu2 = Du(z2);
         F1 = np.sum(ne*gradu1,axis=1)/2;  F2 = np.sum(ne*gradu2,axis=1)/2; 
         FN = np.zeros((len(F1),2)); FN[:,0] = F1; FN[:,1] = F2;
@@ -82,7 +82,7 @@ def Poisson(node,elem,pde,bdStruct,*args):
     #end
     
     # --------- Dirichlet boundary conditions ---------------
-    eD = bdStruct['eD'];  g_D = pde['g_D'];
+    eD = bdStruct.eD;  g_D = pde.g_D;
     isBdNode = np.array( [False]*N );  isBdNode[eD] = True;
     bdNode = isBdNode;  freeNode = ~bdNode;  # np.array 的逻辑数组可以这样取反，但列表不可以
     pD = node[bdNode,:];
@@ -103,8 +103,8 @@ def PoissonP2(node,elem,pde,bdStruct,*args):
     # -------------- Sparse assembling indices --------------
     # auxstructure
     auxT = auxstructure(node, elem);
-    edge = auxT['edge']; 
-    elem2edge = auxT['elem2edge'];
+    edge = auxT.edge; 
+    elem2edge = auxT.elem2edge;
     # numbers
     N = node.shape[0]; NT = elem.shape[0]; NE = edge.shape[0];
     NNdof = N + NE; Ndof = 6; #global and local d.o.f. numbers
@@ -158,21 +158,20 @@ def PoissonP2(node,elem,pde,bdStruct,*args):
     phi[:,4] = 4*_lambda[:,0]*_lambda[:,2];
     phi[:,5] = 4*_lambda[:,1]*_lambda[:,0];
     # load vector
-    f = pde['f'];
     F = np.zeros( (NT,Ndof) ); # straighten
     for p in range(nG):
         # quadrature points in the x-y coordinate
         pxy = _lambda[p,0]*node[elem[:,0],:] \
             + _lambda[p,1]*node[elem[:,1],:] \
             + _lambda[p,2]*node[elem[:,2],:];
-        fxy = f(pxy).reshape((-1,1));
+        fxy = pde.f(pxy).reshape((-1,1));
         F = F + weight[p]*fxy*phi[p,:];
     #end
     F = area[:,np.newaxis]*F; # area.reshape((-1,1))*F;
     ff = np.bincount(elem2.ravel("F"), weights = F.ravel("F"), minlength = NNdof);
     
     # ------- Neumann boundary conditions -----------
-    bdIndexN = bdStruct['bdIndexN']; elemN = bdStruct['elemN'];
+    bdIndexN = bdStruct.bdIndexN; elemN = bdStruct.elemN;
     if elemN.any():
         # Sparse assembling index
         elem1 = np.hstack( (elemN, bdIndexN[:,np.newaxis] + N) ) ;  ndof = 3;
@@ -190,7 +189,7 @@ def PoissonP2(node,elem,pde,bdStruct,*args):
         nvec[:,0] = -e[:,1]/he; nvec[:,1] =  e[:,0]/he;
         # assemble
         FN = np.zeros( (nel,ndof) );
-        Du = pde['Du'];
+        Du = pde.Du;
         for p in range(ng):
             pz = _lambda[p,0]*z1 + _lambda[p,1]*z2;
             Dnu = np.sum( Du(pz)*nvec, axis=1 ).reshape((-1,1)); 
@@ -199,9 +198,9 @@ def PoissonP2(node,elem,pde,bdStruct,*args):
         FN = he[:,np.newaxis]*FN;
         ff = ff + np.bincount(elem1.ravel("F"), weights = FN.ravel("F"), minlength = NNdof);    
     # --------- Dirichlet boundary conditions ---------------
-    eD = bdStruct['eD']; bdIndexD = bdStruct['bdIndexD'];
+    eD = bdStruct.eD; bdIndexD = bdStruct.bdIndexD;
     id = np.hstack( (eD, bdIndexD+N) ); 
-    g_D = pde['g_D']; elemD = bdStruct['elemD'];
+    g_D = pde.g_D; elemD = bdStruct.elemD;
     isBdNode = np.array( [False]*NNdof ); isBdNode[id] = True; 
     bdDof = isBdNode; freeDof = ~isBdNode;
     z1 = node[elemD[:,0],:]; z2 = node[elemD[:,1],:]; zc = (z1+z2)/2;
@@ -222,14 +221,14 @@ def PoissonP3(node,elem,pde,bdStruct,*args):
     # -------------- Sparse assembling indices --------------
     # auxstructure
     auxT = auxstructure(node, elem);
-    edge = auxT['edge']; 
-    elem2edge = auxT['elem2edge'];
+    edge = auxT.edge; 
+    elem2edge = auxT.elem2edge;
     # numbers
     N = node.shape[0]; NT = elem.shape[0]; NE = edge.shape[0];
     NNdof = N + 2*NE + NT; Ndof = 10; #global and local d.o.f. numbers
     # sgnelem
     v1 = [1,2,0]; v2 = [2,0,1]; # L1: 1-2 ( matlab 2-3 )
-    bdIndex = bdStruct['bdIndex']; E = np.array([False]*NE); E[bdIndex] = 1;
+    bdIndex = bdStruct.bdIndex; E = np.array([False]*NE); E[bdIndex] = 1;
     sgnelem = np.sign(elem[:,v2] - elem[:,v1]);
     sgnbd = E[elem2edge];  sgnelem[sgnbd] = 1;
     sgnelem[sgnelem==-1] = 0; 
@@ -313,21 +312,20 @@ def PoissonP3(node,elem,pde,bdStruct,*args):
     phi[:,8] = 9/2*_lambda[:,1]*_lambda[:,0]*(3*_lambda[:,1]-1);
     phi[:,9] = 27*_lambda[:,0]*_lambda[:,1]*_lambda[:,2];
     # load vector
-    f = pde['f'];
     F = np.zeros( (NT,Ndof) ); # straighten
     for p in range(nG):
         # quadrature points in the x-y coordinate
         pxy = _lambda[p,0]*node[elem[:,0],:] \
             + _lambda[p,1]*node[elem[:,1],:] \
             + _lambda[p,2]*node[elem[:,2],:];
-        fxy = f(pxy).reshape((-1,1));
+        fxy = pde.f(pxy).reshape((-1,1));
         F = F + weight[p]*fxy*phi[p,:];
     #end
     F = area[:,np.newaxis]*F; # area.reshape((-1,1))*F;
     ff = np.bincount(elem2.ravel("F"), weights = F.ravel("F"), minlength = NNdof);
     
     # ------- Neumann boundary conditions -----------
-    bdIndexN = bdStruct['bdIndexN']; elemN = bdStruct['elemN'];
+    bdIndexN = bdStruct.bdIndexN; elemN = bdStruct.elemN;
     if elemN.any():
         # Sparse assembling index
         bdIndexN1 = bdIndexN[:,np.newaxis];
@@ -347,7 +345,7 @@ def PoissonP3(node,elem,pde,bdStruct,*args):
         nvec[:,0] = -e[:,1]/he; nvec[:,1] =  e[:,0]/he;
         # assemble
         FN = np.zeros( (nel,ndof) );
-        Du = pde['Du'];
+        Du = pde.Du;
         for p in range(ng):
             pz = _lambda[p,0]*z1 + _lambda[p,1]*z2;
             Dnu = np.sum( Du(pz)*nvec, axis=1 ).reshape((-1,1)); 
@@ -356,9 +354,9 @@ def PoissonP3(node,elem,pde,bdStruct,*args):
         FN = he[:,np.newaxis]*FN;
         ff = ff + np.bincount(elem1.ravel("F"), weights = FN.ravel("F"), minlength = NNdof);    
     # --------- Dirichlet boundary conditions ---------------
-    eD = bdStruct['eD']; bdIndexD = bdStruct['bdIndexD'];
+    eD = bdStruct.eD; bdIndexD = bdStruct.bdIndexD;
     id = np.hstack( (eD, bdIndexD+N, bdIndexD+N+NE) ); 
-    g_D = pde['g_D']; elemD = bdStruct['elemD'];
+    g_D = pde.g_D; elemD = bdStruct.elemD;
     isBdNode = np.array( [False]*NNdof ); isBdNode[id] = True; 
     bdDof = isBdNode; freeDof = ~isBdNode; # only valid for bool ndarray
     z1 = node[elemD[:,0],:]; z2 = node[elemD[:,1],:]; 

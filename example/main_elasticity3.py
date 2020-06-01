@@ -33,7 +33,7 @@ bdNeumann = []; # only Dirichlet condition for elasticity3
 # ------------------------ PDE data ------------------------
 lambda_ = 1; mu = 1;  
 pde = elasticitydata(lambda_, mu);
-uexact = pde['uexact']; Du = pde['Du'];
+uexact = pde.uexact; Du = pde.Du;
 
 # ----------------- elasticity2 ---------------------
 maxIt = 4;

@@ -13,8 +13,8 @@ def FEM1D(node,elem1D,pde,bdStruct):
     
     # ----------------- preparation -------------------------
     N = node.size; nel = elem1D.shape[0]; Ndof = 2;
-    f = pde['f']; Du = pde['Du']; g_D = pde['g_D']; para = pde['para'];
-    Neumann = bdStruct['Neumann']; Dirichlet = bdStruct['Dirichlet'];
+    f = pde.f; Du = pde.Du; g_D = pde.g_D; para = pde.para;
+    Neumann = bdStruct.Neumann; Dirichlet = bdStruct.Dirichlet;
     
     
     # -------------- Sparse assembling indices --------------

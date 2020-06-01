@@ -33,7 +33,7 @@ bdNeumann = " abs(y-0)<1e-4 or abs(x-1)<1e-4 "; # string for Neumann
 # ------------------------ PDE data ------------------------
 lambda_ = 1; mu = 1;  
 pde = elasticitydata(lambda_, mu);
-uexact = pde['uexact']; Du = pde['Du'];
+uexact = pde.uexact; Du = pde.Du;
 
 # ----------------- elasticity1 ---------------------
 maxIt = 4;

@@ -25,7 +25,7 @@ def getL2error(node,elem,uh,u,*args):
     area = 0.5*abs( -ve3[:,0]*ve2[:,1] + ve3[:,1]*ve2[:,0] );
     # auxstructure
     auxT = auxstructure(node, elem);
-    elem2edge = auxT['elem2edge'];
+    elem2edge = auxT.elem2edge;
     
     ## P1-Lagrange
     if feSpace == 'P1':
@@ -47,10 +47,10 @@ def getL2error(node,elem,uh,u,*args):
     ## P3-Lagrange
     if feSpace == 'P3':
         # sgnelem
-        edge = auxT['edge']; NE = edge.shape[0];
+        edge = auxT.edge; NE = edge.shape[0];
         bdStruct = setboundary(node,elem);
         v1 = [1,2,0]; v2 = [2,0,1]; # L1: 1-2 ( matlab 2-3 )
-        bdIndex = bdStruct['bdIndex']; E = np.array([False]*NE); E[bdIndex] = 1;
+        bdIndex = bdStruct.bdIndex; E = np.array([False]*NE); E[bdIndex] = 1;
         sgnelem = np.sign(elem[:,v2] - elem[:,v1]);
         sgnbd = E[elem2edge];  sgnelem[sgnbd] = 1;
         sgnelem[sgnelem==-1] = 0; 
@@ -99,7 +99,7 @@ def getH1error(node,elem,uh,Du,*args):
     _lambda, weight = quadpts(quadOrder); nG = len(weight);
     # auxstructure
     auxT = auxstructure(node, elem);
-    elem2edge = auxT['elem2edge'];
+    elem2edge = auxT.elem2edge;
     # area
     z1 = node[elem[:,0],:]; z2 = node[elem[:,1],:]; z3 = node[elem[:,2],:];
     xi = np.array( [ z2[:,0]-z3[:,0], z3[:,0]-z1[:,0], z1[:,0]-z2[:,0] ] ).transpose();
@@ -152,10 +152,10 @@ def getH1error(node,elem,uh,Du,*args):
     ## P3-Lagrange
     if feSpace == 'P3':
         # sgnelem
-        edge = auxT['edge']; NE = edge.shape[0];
+        edge = auxT.edge; NE = edge.shape[0];
         bdStruct = setboundary(node,elem);
         v1 = [1,2,0]; v2 = [2,0,1]; # L1: 1-2 ( matlab 2-3 )
-        bdIndex = bdStruct['bdIndex']; E = np.array([False]*NE); E[bdIndex] = 1;
+        bdIndex = bdStruct.bdIndex; E = np.array([False]*NE); E[bdIndex] = 1;
         sgnelem = np.sign(elem[:,v2] - elem[:,v1]);
         sgnbd = E[elem2edge];  sgnelem[sgnbd] = 1;
         sgnelem[sgnelem==-1] = 0;

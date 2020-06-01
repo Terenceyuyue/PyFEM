@@ -23,13 +23,12 @@ node = np.linspace(a,b,nel+1);
 elem1D = np.zeros( (nel,2) , dtype = np.int); 
 elem1D[:,0] = range(0,N-1);  elem1D[:,1] = range(1,N); 
 
-Neumann = [0];   Dirichlet = [N-1];
-bdStruct = {'Neumann':Neumann, 'Dirichlet':Dirichlet};
+class bdStruct: Neumann = [0];   Dirichlet = [N-1];
 
 #  ---------------------- PDE ----------------------
 a = 1;  b = 0;  c = 0;  para = [a,b,c]
 pde = pde1D(para);
-f = pde['f']; u = pde['uexact']; 
+f = pde.f; u = pde.uexact; 
 
 
 # ----------------------- FEM1D --------------------
@@ -39,7 +38,7 @@ uh = FEM1D(node,elem1D ,pde,bdStruct);
 
 
 # ------------ error analysis -----------
-plt.figure(figsize=(8,4))
+plt.figure(figsize=(6,4))
 
 plt.plot(node,u(node),"r-",label="$u$",linewidth=2) # exact
 plt.plot(node,uh,"k--",label="$u_h$",linewidth=2)

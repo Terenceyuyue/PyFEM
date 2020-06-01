@@ -16,7 +16,7 @@ def elasticity1(node,elem,pde,bdStruct):
 
    
     N = node.shape[0]; NT = elem.shape[0]; Ndof = 3;
-    lambda_ = pde['lambda_']; mu = pde['mu']; f = pde['f'];
+    lambda_ = pde.lambda_; mu = pde.mu; f = pde.f;
     
     # -------------- Compute (Dibase,Djbase) --------------------
     Dphi, area = gradbasis(node,elem);
@@ -80,9 +80,9 @@ def elasticity1(node,elem,pde,bdStruct):
                      minlength = 2*N);
     
     # ------------ Neumann boundary condition ---------------- 
-    elemN = bdStruct['elemN'];
+    elemN = bdStruct.elemN;
     if elemN.any():
-       g_N = pde['g_N'];
+       g_N = pde.g_N;
        z1 = node[elemN[:,0],:]; z2 = node[elemN[:,1],:];
        e = z1-z2; # e = z2-z1
        ne = np.array( [ -e[:,1], e[:,0] ] ).transpose(); # scaled ne
@@ -96,7 +96,7 @@ def elasticity1(node,elem,pde,bdStruct):
                               FN,  minlength = 2*N);
            
     # ------------ Dirichlet boundary condition ----------------
-    g_D = pde['g_D'];  eD = bdStruct['eD'];
+    g_D = pde.g_D;  eD = bdStruct.eD;
     id = np.hstack((eD,eD+N));
     isBdNode = np.array([False]*2*N); isBdNode[id] = True;
     bdDof = isBdNode; freeDof = ~isBdNode;
@@ -115,7 +115,7 @@ def elasticity2(node,elem,pde,bdStruct):
 
    
     N = node.shape[0]; NT = elem.shape[0]; Ndof = 3;
-    lambda_ = pde['lambda_']; mu = pde['mu']; f = pde['f'];
+    lambda_ = pde.lambda_; mu = pde.mu; f = pde.f;
     
     # -------------- Compute (Dibase,Djbase) --------------------
     Dphi, area = gradbasis(node,elem);
@@ -191,9 +191,9 @@ def elasticity2(node,elem,pde,bdStruct):
                      minlength = 2*N);
     
     # ------------ Neumann boundary condition ---------------- 
-    elemN = bdStruct['elemN'];
+    elemN = bdStruct.elemN;
     if elemN.any():
-       g_N = pde['g_N'];
+       g_N = pde.g_N;
        z1 = node[elemN[:,0],:]; z2 = node[elemN[:,1],:];
        e = z1-z2; # e = z2-z1
        ne = np.array( [ -e[:,1], e[:,0] ] ).transpose(); # scaled ne
@@ -207,7 +207,7 @@ def elasticity2(node,elem,pde,bdStruct):
                               FN,  minlength = 2*N);
            
     # ------------ Dirichlet boundary condition ----------------
-    g_D = pde['g_D'];  eD = bdStruct['eD'];
+    g_D = pde.g_D;  eD = bdStruct.eD;
     id = np.hstack((eD,eD+N));
     isBdNode = np.array([False]*2*N); isBdNode[id] = True;
     bdDof = isBdNode; freeDof = ~isBdNode;
@@ -226,7 +226,7 @@ def elasticity3(node,elem,pde,bdStruct):
 
    
     N = node.shape[0]; NT = elem.shape[0]; Ndof = 3;
-    lambda_ = pde['lambda_']; mu = pde['mu']; f = pde['f'];
+    lambda_ = pde.lambda_; mu = pde.mu; f = pde.f;
     
     # -------------- Compute (Dibase,Djbase) --------------------
     Dphi, area = gradbasis(node,elem);
@@ -301,9 +301,9 @@ def elasticity3(node,elem,pde,bdStruct):
                      minlength = 2*N);
     
     # ------------ Neumann boundary condition ---------------- 
-    elemN = bdStruct['elemN'];
+    elemN = bdStruct.elemN;
     if elemN.any():
-       g_N = pde['g_N'];
+       g_N = pde.g_N;
        z1 = node[elemN[:,0],:]; z2 = node[elemN[:,1],:];
        e = z1-z2; # e = z2-z1
        ne = np.array( [ -e[:,1], e[:,0] ] ).transpose(); # scaled ne
@@ -317,7 +317,7 @@ def elasticity3(node,elem,pde,bdStruct):
                               FN,  minlength = 2*N);
            
     # ------------ Dirichlet boundary condition ----------------
-    g_D = pde['g_D'];  eD = bdStruct['eD'];
+    g_D = pde.g_D;  eD = bdStruct.eD;
     id = np.hstack((eD,eD+N));
     isBdNode = np.array([False]*2*N); isBdNode[id] = True;
     bdDof = isBdNode; freeDof = ~isBdNode;

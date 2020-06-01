@@ -9,7 +9,7 @@ sys.path.append("../")  # 导入上一级目录的模块
 
 import time
 import matplotlib.pyplot as plt
-from tool.visualize import showmesh, findnode, showsolution #, findelem, findedge
+from tool.visualize import showmesh, findnode, showsolution, findelem, findedge
 
 # pde
 from pdedata.Poissondata import Poissondata
@@ -39,7 +39,7 @@ bdStruct = setboundary(node, elem, bdNeumann);
 plt.figure(figsize=(6,6))
 showmesh(node,elem);
 findnode(node);
-# findelem(node,elem);
+findelem(node,elem);
 # findedge(node,elem);
 
 # ------------------ PDE data -------------------
@@ -50,7 +50,7 @@ uh = Poisson(node, elem, pde, bdStruct);
 
 
 # --------------------- error analysis ----------------------
-u = pde['uexact'];  Du = pde['Du'];
+u = pde.uexact;  Du = pde.Du;
 ue = u(node);
 plt.figure()
 ax = plt.subplot(1,2,1, projection = '3d'); 
@@ -61,7 +61,7 @@ showsolution(node,elem, ue, ax);
 # L2 and H1 errors
 ErrL2 = getL2error(node, elem, uh, u);
 ErrH1 = getH1error(node, elem, uh, Du);  
-print('ErrL2 = %.2e, ErrH1 = %.2e' % (ErrL2, ErrH1) )  
+print('ErrL2 = %.4e, ErrH1 = %.2e' % (ErrL2, ErrH1) )  
 
 
 toc = (time.process_time() - tic);

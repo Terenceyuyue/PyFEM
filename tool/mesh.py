@@ -47,7 +47,7 @@ def uniformrefine(node,elem):
 
     # auxiliary mesh data
     auxT = auxstructure(node,elem);
-    edge = auxT['edge']; elem2edge = auxT['elem2edge'];
+    edge = auxT.edge; elem2edge = auxT.elem2edge;
     N = node.shape[0]; NT = elem.shape[0]; #NE = edge.shape[0];
     
     # Add new nodes: middle points of all edges

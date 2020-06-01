@@ -35,7 +35,7 @@ bdNeumann = "abs(x-1)<=1e-4";
 
 # ------------------ PDE data -------------------
 pde = Poissondata();
-u = pde['uexact']; Du = pde['Du'];
+u = pde.uexact; Du = pde.Du;
 
 # ----------------- Poisson ---------------------
 maxIt = 4;
