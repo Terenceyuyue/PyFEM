@@ -10,7 +10,6 @@ mini_batch_size = 10;
 
 %% Define activation functions
 sigmoid = @(z) 1./(1+exp(-z));
-sigmoid_prime = @(z) sigmoid(z).*(1-sigmoid(z));
 
 %% Initialize weights and biases
 w2 = randn(ndim([2,1])); % weights from 1-layer to 2-layer
