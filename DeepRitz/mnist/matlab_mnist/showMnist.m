@@ -3,6 +3,7 @@ function showMnist(data_x)
 % 若 N>25, 则仅显示前 25 张图
 
 if nargin==0
+    clc;clear;close all
     mdata = load('mnistdata');
     data_x = mdata.test_data_x;
 end
